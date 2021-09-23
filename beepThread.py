@@ -26,27 +26,27 @@ class BeepThread(Thread):
         text = self.message.upper()
         letter_index = 0
         for letter in list(text):
-            print(letter)
+            # print(letter)
             if letter == " ":
-                print("   SPACE")
+                # print("   SPACE")
                 time.sleep(self.spaceWord / 1000)
             else:
                 beep_index = 0
-                print("LETTER: " + letter)
+                # print("LETTER: " + letter)
                 for beep in self.signs[letter]:
                     if beep:
-                        print("dash")
+                        # print("dash")
                         self.dash_sound.play()
                         pygame.time.wait(self.durationDash)
                     else:
-                        print("dot")
+                        # print("dot")
                         self.dot_sound.play()
                         pygame.time.wait(self.durationDot)
                     if beep_index + 1 < len(self.signs[letter]):
-                        print("space symbol")
+                        # print("space symbol")
                         time.sleep(self.spaceSymbol / 1000)
                     beep_index += 1
                 if letter_index < len(list(text)):
-                    print("space letter")
+                    # print("space letter")
                     time.sleep(self.spaceLetter / 1000)
             letter_index += 1

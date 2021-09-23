@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import scrolledtext
 
 from beepThread import BeepThread
 
@@ -64,53 +65,51 @@ def setup_beep_thread(text_entry):
 
 def output_to_label(text_entry):
     message = text_entry.get()
-    output['text'] = create_morse_text(signs, message)
+    output.configure(state="normal")
+    output.delete(1.0, tk.END)
+    output.insert(tk.INSERT, create_morse_text(signs, message))
+    output.configure(state="disabled")
 
-
-def create_morse_text(signs, message):
+def create_morse_text(morse_code, message):
     text = message.upper()
     string_output = ""
     letter_index = 0
     for letter in list(text):
-        # print(letter)
         if letter == " ":
             string_output += "   "
-            # print("   SPACE")
         else:
-            beep_index = 0
-            # print("LETTER: " + letter)
-            for beep in signs[letter]:
+            for beep in morse_code[letter]:
                 if beep:
                     string_output += "-"
-                    # print("dash")
                 else:
                     string_output += "."
-                    # print("dot")
-                if beep_index + 1 < len(signs[letter]):
-                    string_output += " "
-                    # print("space symbol")
-                beep_index += 1
             if letter_index < len(list(text)):
-                string_output += "   "
-                # print("space letter")
+                string_output += " "
         letter_index += 1
     return string_output
 
 
 if __name__ == '__main__':
     root = tk.Tk()
-    root.geometry("300x300")
+    root.geometry("660x440")
+    root.resizable(False, False)
+    root.configure(background='#E1C699')
+
+    label = tk.Label(root, text="Input:")
+    label.grid(row=0, column=0)
 
     entry = tk.Entry(root)
-    entry.grid(row=0, column=0, columnspan=2)
+    entry.grid(row=0, column=1)
 
     sound_button = tk.Button(root, text="Sound out morse", command=(lambda message=entry: setup_beep_thread(message)))
     sound_button.grid(row=1, column=0)
 
-    text_button = tk.Button(root, text="Output as text", command= (lambda message=entry: output_to_label(message)))
+    text_button = tk.Button(root, text="Output as text", command=(lambda message=entry: output_to_label(message)))
     text_button.grid(row=1, column=1)
 
-    output = tk.Label(root, text="test")
+    output = scrolledtext.ScrolledText(root)
     output.grid(row=2, column=0, columnspan=2)
+    output.configure(state="disabled")
 
+    root.pack_slaves()
     root.mainloop()
