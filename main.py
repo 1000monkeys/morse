@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.messagebox
 from tkinter import scrolledtext
 
 from beepThread import BeepThread
@@ -55,12 +56,18 @@ signs = {
     "@": (False, True, True, False, True, False),
     "&": (False, True, False, False, False)
 }
+thread_beep = BeepThread(signs, "")
 
 
 def setup_beep_thread(text_entry):
+    global thread_beep
+
     message = text_entry.get()
-    thread_beep = BeepThread(signs, message)
-    thread_beep.start()
+    if not thread_beep.running:
+        thread_beep = BeepThread(signs, message)
+        thread_beep.start()
+    else:
+        tkinter.messagebox.showerror("Already beeping!", "Wait for the current beeping to stop!")
 
 
 def output_to_label(text_entry):
@@ -69,6 +76,7 @@ def output_to_label(text_entry):
     output.delete(1.0, tk.END)
     output.insert(tk.INSERT, create_morse_text(signs, message))
     output.configure(state="disabled")
+
 
 def create_morse_text(morse_code, message):
     text = message.upper()

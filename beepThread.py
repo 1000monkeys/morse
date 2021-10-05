@@ -22,7 +22,10 @@ class BeepThread(Thread):
         self.spaceLetter = self.durationDot * 3
         self.spaceWord = self.durationDot * 7
 
+        self.running = False
+
     def run(self):
+        self.running = True
         text = self.message.upper()
         letter_index = 0
         for letter in list(text):
@@ -50,3 +53,4 @@ class BeepThread(Thread):
                     # print("space letter")
                     time.sleep(self.spaceLetter / 1000)
             letter_index += 1
+        self.running = False
